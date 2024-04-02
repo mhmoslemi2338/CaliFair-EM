@@ -1,0 +1,57 @@
+[
+  {
+  "name": "Structured/Amazon-Google",
+  "task_type": "classification",
+  "vocab": ["0", "1"],
+  "trainset": "DATA/Amazon-Google/train.txt",
+  "validset": "DATA/Amazon-Google/valid.txt",
+  "testset": "DATA/Amazon-Google/test.txt"
+  },
+  {
+  "name": "Structured/Beer",
+  "task_type": "classification",
+  "vocab": ["0", "1"],
+  "trainset": "DATA/Beer/train.txt",
+  "validset": "DATA/Beer/valid.txt",
+  "testset": "DATA/Beer/test.txt"
+  },
+  {
+  "name": "Structured/DBLP-ACM",
+  "task_type": "classification",
+  "vocab": ["0", "1"],
+  "trainset": "DATA/DBLP-ACM/train.txt",
+  "validset": "DATA/DBLP-ACM/valid.txt",
+  "testset": "DATA/DBLP-ACM/test.txt"
+  },
+  {
+  "name": "Structured/DBLP-GoogleScholar",
+  "task_type": "classification",
+  "vocab": ["0", "1"],
+  "trainset": "DATA/DBLP-GoogleScholar/train.txt",
+  "validset": "DATA/DBLP-GoogleScholar/valid.txt",
+  "testset": "DATA/DBLP-GoogleScholar/test.txt"
+  },
+  {
+  "name": "Structured/Fodors-Zagats",
+  "task_type": "classification",
+  "vocab": ["0", "1"],
+  "trainset": "DATA/Fodors-Zagats/train.txt",
+  "validset": "DATA/Fodors-Zagats/valid.txt",
+  "testset": "DATA/Fodors-Zagats/test.txt"
+  },
+  {
+  "name": "Structured/iTunes-Amazon",
+  "task_type": "classification",
+  "vocab": ["0", "1"],
+  "trainset": "DATA/iTunes-Amazon/train.txt",
+  "validset": "DATA/iTunes-Amazon/valid.txt",
+  "testset": "DATA/iTunes-Amazon/test.txt"
+  },
+  {
+  "name": "Structured/Walmart-Amazon",
+  "task_type": "classification",
+  "vocab": ["0", "1"],
+  "trainset": "DATA/Walmart-Amazon/train.txt",
+  "validset": "DATA/Walmart-Amazon/valid.txt",
+  "testset": "DATA/Walmart-Amazon/test.txt"
+  }]

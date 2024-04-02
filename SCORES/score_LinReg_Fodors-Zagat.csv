@@ -1,0 +1,190 @@
+left,right,label,score
+french,californian,0.0,0.0
+french,asian,1.0,1.0
+italian,italian,0.0,0.0
+american,american,1.0,1.0
+californian,continental,0.0,0.0
+italian,continental,0.0,0.0
+coffee bar,american,0.0,0.0
+american,asian,0.0,0.0
+american,asian,1.0,1.0
+french,international,0.0,0.0
+french,italian,0.0,0.0
+international,mexican,0.0,0.0
+coffee bar,southwestern,0.0,0.0
+american,health food,0.0,0.0
+californian,buffets,0.0,0.0
+ext 6108 international,french,0.0,0.0
+asian,french,0.0,0.0
+coffee bar,coffee shops/diners,0.0,0.0
+mexican,dive american,0.0,0.0
+asian,continental,0.0,0.0
+coffee bar,french,0.0,0.0
+american,coffee shops/diners,0.0,0.0
+asian,caribbean,1.0,1.0
+american,seafood,0.0,0.0
+french,italian,1.0,1.0
+mediterranean,asian,0.0,0.0
+french,seafood,0.0,0.0
+coffee bar,steak houses,0.0,0.0
+middle eastern,continental,0.0,0.0
+asian,coffee shops/diners,0.0,0.0
+californian,coffee shops/diners,0.0,0.0
+french,asian,0.0,0.0
+american,continental,0.0,0.0
+american,buffets,0.0,0.0
+italian,continental,0.0,0.0
+mexican,tel caribbean,1.0,1.0
+italian,french,0.0,0.0
+american,caribbean,0.0,0.0
+italian,international,0.0,0.0
+coffee bar,asian,0.0,0.0
+latin american,asian,0.0,0.0
+dive american,continental,0.0,0.0
+italian,asian,0.0,0.0
+french,italian,0.0,0.0
+coffee bar,asian,0.0,0.0
+middle eastern,continental,0.0,0.0
+french,italian,0.0,0.0
+french,american,0.0,0.0
+italian,steak houses,0.0,0.0
+mediterranean,mexican,0.0,0.0
+american,american,0.0,0.0
+american,american,0.0,0.0
+dive american,steak houses,0.0,0.0
+american,italian,0.0,0.0
+asian,continental,0.0,0.0
+american,southwestern,0.0,0.0
+seafood,french,1.0,1.0
+american,seafood,1.0,1.0
+asian,italian,1.0,1.0
+american,delicatessen,1.0,1.0
+italian,american,0.0,0.0
+asian,italian,0.0,0.0
+american,coffee shops/diners,0.0,0.0
+italian,mediterranean,0.0,0.0
+american,international,1.0,1.0
+asian,asian,0.0,0.0
+american,american,0.0,0.0
+asian,continental,0.0,0.0
+american,coffee shops/diners,0.0,0.0
+american,asian,0.0,0.0
+asian,american,0.0,0.0
+french,californian,0.0,0.0
+american,seafood,0.0,0.0
+american,french,0.0,0.0
+american,continental,1.0,1.0
+french,asian,1.0,1.0
+californian,asian,0.0,0.0
+american,continental,0.0,0.0
+asian,ext 6108 international,0.0,0.0
+french,american,0.0,0.0
+coffee bar,french,0.0,0.0
+asian,french,0.0,0.0
+asian,french,0.0,0.0
+american,continental,0.0,0.0
+caribbean,buffets,0.0,0.0
+french,coffee shops/diners,0.0,0.0
+asian,italian,0.0,0.0
+american,italian,0.0,0.0
+seafood,asian,0.0,0.0
+american,american,0.0,0.0
+coffee bar,international,0.0,0.0
+health food,continental,0.0,0.0
+american,southwestern,0.0,0.0
+italian,asian,0.0,0.0
+american,american,0.0,0.0
+american,caribbean,0.0,0.0
+asian,french,0.0,0.0
+asian,continental,0.0,0.0
+french,french,0.0,0.0
+french,continental,0.0,0.0
+californian,buffets,0.0,0.0
+american,dive american,0.0,0.0
+american,californian,0.0,0.0
+dive american,coffee shops/diners,0.0,0.0
+italian,french,1.0,1.0
+coffee bar,asian,0.0,0.0
+american,asian,0.0,0.0
+californian,southwestern,0.0,0.0
+asian,continental,0.0,0.0
+or 212/941 -0772 american,french,1.0,1.0
+french,health food,0.0,0.0
+asian,american,0.0,0.0
+italian,french,0.0,0.0
+italian,italian,0.0,0.0
+asian,french,1.0,1.0
+mediterranean,asian,0.0,0.0
+american,american,0.0,0.0
+american,international,0.0,0.0
+asian,steak houses,0.0,0.0
+asian,american,0.0,0.0
+latin american,american,0.0,0.0
+american,french,0.0,0.0
+french,asian,0.0,0.0
+middle eastern,american,0.0,0.0
+steak houses,french,0.0,0.0
+french,asian,0.0,0.0
+american,asian,0.0,0.0
+italian,asian,0.0,0.0
+seafood,italian,1.0,1.0
+coffee bar,californian,0.0,0.0
+french,international,0.0,0.0
+american,french,0.0,0.0
+american,asian,0.0,0.0
+asian,american,1.0,1.0
+italian,american,0.0,0.0
+american,californian,0.0,0.0
+mexican,coffee shops/diners,0.0,0.0
+french,ext 6108 international,0.0,0.0
+latin american,continental,0.0,0.0
+italian,greek and middle eastern,0.0,0.0
+coffee bar,continental,0.0,0.0
+or 212/632 -5100 american,mediterranean,0.0,0.0
+asian,american,0.0,0.0
+american,international,0.0,0.0
+french,dive american,0.0,0.0
+italian,ext 6108 international,0.0,0.0
+asian,french,0.0,0.0
+latin american,east european,0.0,0.0
+french,french,0.0,0.0
+dive american,mexican,0.0,0.0
+american,continental,0.0,0.0
+french,seafood,1.0,1.0
+coffee bar,asian,0.0,0.0
+mediterranean,asian,0.0,0.0
+international,french,0.0,0.0
+french,american,0.0,0.0
+asian,american,1.0,1.0
+french,seafood,0.0,0.0
+american,continental,0.0,0.0
+american,american,0.0,0.0
+coffee bar,american,0.0,0.0
+asian,coffee shops/diners,0.0,0.0
+asian,american,0.0,0.0
+asian,french,0.0,0.0
+american,continental,0.0,0.0
+italian,international,1.0,1.0
+american,french,0.0,0.0
+latin american,mediterranean,0.0,0.0
+californian,only in las vegas,0.0,0.0
+caribbean,seafood,0.0,0.0
+middle eastern,only in las vegas,0.0,0.0
+seafood,asian,0.0,0.0
+american,asian,0.0,0.0
+american,continental,0.0,0.0
+french,italian,0.0,0.0
+french,american,0.0,0.0
+ext 6108 international,american,0.0,0.0
+mediterranean,italian,0.0,0.0
+californian,coffee shops/diners,0.0,0.0
+coffee bar,coffee shops/diners,0.0,0.0
+californian,coffee shops/diners,0.0,0.0
+coffee bar,asian,0.0,0.0
+american,asian,0.0,0.0
+french,continental,0.0,0.0
+american,mediterranean,1.0,1.0
+italian,french,0.0,0.0
+american,southern,0.0,0.0
+american,buffets,0.0,0.0
+french,french,0.0,0.0
