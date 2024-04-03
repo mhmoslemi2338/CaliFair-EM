@@ -2,82 +2,85 @@ import gender_guesser.detector as gender
 import copy
 import ot
 import pandas as pd
-
+from sklearn.metrics import confusion_matrix
 import numpy as np
-female_names = ['adriana', 'agma', 'alexandra', 'alice', 'aya', 'barbara', 'betty', 'bhavani', 'carol',
-                    'carole', 'cass', 'cecilia', 'chia-jung', 'christine', 'clara', 'claudia', 'debra',
-                    'diane', 'dimitra', 'ebru', 'elaheh', 'elena', 'elisa', 'elke', 'esther', 'fatima',
-                    'fatma', 'felicity', 'françoise', 'gillian', 'hedieh', 'helen', 'ilaria', 'isabel', 
-                    'jeanette', 'jeanine', 'jennifer', 'jenny', 'joann', 'julia', 'juliana', 'julie', 
-                    'kelly', 'kimberly', 'laura', 'letizia', 'ljiljana', 'louiqa', 'lynn', 'maria',
-                    'marianne', 'melissa', 'meral', 'monica', 'myra', 'pamela', 'patricia', 'paula',
-                    'pierangela', 'pina', 'rachel', 'sandra', 'sheila', 'sihem', 'silvana', 'sophie',
-                    'sorana', 'sunita', 'susan', 'teresa', 'tova', 'ulrike', 'vana', 'véronique', 'ya-hui', 'yelena', 'zoé']
 
+# List of female names used for gender detection
+female_names = ['adriana', 'agma', 'alexandra', 'alice', 'aya', 'barbara', 'betty', 'bhavani', 'carol',
+                'carole', 'cass', 'cecilia', 'chia-jung', 'christine', 'clara', 'claudia', 'debra',
+                'diane', 'dimitra', 'ebru', 'elaheh', 'elena', 'elisa', 'elke', 'esther', 'fatima',
+                'fatma', 'felicity', 'françoise', 'gillian', 'hedieh', 'helen', 'ilaria', 'isabel', 
+                'jeanette', 'jeanine', 'jennifer', 'jenny', 'joann', 'julia', 'juliana', 'julie', 
+                'kelly', 'kimberly', 'laura', 'letizia', 'ljiljana', 'louiqa', 'lynn', 'maria',
+                'marianne', 'melissa', 'meral', 'monica', 'myra', 'pamela', 'patricia', 'paula',
+                'pierangela', 'pina', 'rachel', 'sandra', 'sheila', 'sihem', 'silvana', 'sophie',
+                'sorana', 'sunita', 'susan', 'teresa', 'tova', 'ulrike', 'vana', 'véronique', 'ya-hui', 'yelena', 'zoé']
+
+# Function to determine gender based on a given name
 def gender_rev(name):
+    # Stripping any whitespace and splitting the name to get the first part
     name = name.strip().split()[0].strip()
     d = gender.Detector()
+    # Capitalizing the first letter of the name for consistency
     modified_name = name[0].upper() + name[1:]
-    gen_dict = {'male':'male',
-    'female':'female',
-    'andy':'other',
-    'mostly_male': 'male',
-    'mostly_female': 'female',
-    'unknown': 'other'}
+    # Mapping gender categories from gender-guesser library to simplified categories
+    gen_dict = {
+        'male': 'male',
+        'female': 'female',
+        'andy': 'other',
+        'mostly_male': 'male',
+        'mostly_female': 'female',
+        'unknown': 'other'
+    }
     return gen_dict[d.get_gender(modified_name)]
 
-
+# Dictionary mapping sensitive attributes for different datasets
 sens_dict = {
-    'Walmart-Amazon':['category','printers'], # eq
-    'Beer':['Beer_Name','Red'], # cont
-    'Amazon-Google': ['manufacturer','Microsoft'], # cont
-    'Fodors-Zagat':['type','asian'],  # eq
-    'iTunes-Amazon':['Genre','Dance'], # cont
-    'DBLP-GoogleScholar':['venue','vldb j'], # cont
-    'DBLP-ACM':['authors','female'], # func
+    'Walmart-Amazon': ['category', 'printers'],  # Equal
+    'Beer': ['Beer_Name', 'Red'],  # Continuous
+    'Amazon-Google': ['manufacturer', 'Microsoft'],  # Continuous
+    'Fodors-Zagat': ['type', 'asian'],  # Equal
+    'iTunes-Amazon': ['Genre', 'Dance'],  # Continuous
+    'DBLP-GoogleScholar': ['venue', 'vldb j'],  # Continuous
+    'DBLP-ACM': ['authors', 'female'],  # Functional
     'COMPAS': ['Ethnic_Code_Text', 'African-American']
-
 }
 
-
-def make_sens_vector(df , dataset, sens_dict):
-
-    if dataset in ['Walmart-Amazon','Fodors-Zagat', 'COMPAS']:
-        df['left_contains_s'] = df['left_'+sens_dict[dataset][0]] == sens_dict[dataset][1]
-        df['right_contains_s'] = df['right_'+sens_dict[dataset][0]] == sens_dict[dataset][1]
-
-    elif dataset in ['Beer', 'Amazon-Google',  'iTunes-Amazon', 'DBLP-GoogleScholar']:
-        df['left_'+sens_dict[dataset][0]] =  df['left_'+sens_dict[dataset][0]].astype(str)
-        df['right_'+sens_dict[dataset][0]] =  df['right_'+sens_dict[dataset][0]].astype(str)
-        df['left_contains_s'] = df['left_'+sens_dict[dataset][0]].str.lower().str.contains(sens_dict[dataset][1].lower())
-        df['right_contains_s'] = df['right_'+sens_dict[dataset][0]].str.lower().str.contains(sens_dict[dataset][1].lower())
+# Function to create a sensitive attribute vector for a given dataset
+def make_sens_vector(df, dataset, sens_dict):
+    if dataset in ['Walmart-Amazon', 'Fodors-Zagat', 'COMPAS']:
+        # For datasets with equal comparison, check if the attribute values are equal to the sensitive value
+        df['left_contains_s'] = df['left_' + sens_dict[dataset][0]] == sens_dict[dataset][1]
+        df['right_contains_s'] = df['right_' + sens_dict[dataset][0]] == sens_dict[dataset][1]
+    elif dataset in ['Beer', 'Amazon-Google', 'iTunes-Amazon', 'DBLP-GoogleScholar']:
+        # For datasets with continuous comparison, convert attribute values to string and check for substring match
+        df['left_' + sens_dict[dataset][0]] = df['left_' + sens_dict[dataset][0]].astype(str)
+        df['right_' + sens_dict[dataset][0]] = df['right_' + sens_dict[dataset][0]].astype(str)
+        df['left_contains_s'] = df['left_' + sens_dict[dataset][0]].str.lower().str.contains(sens_dict[dataset][1].lower())
+        df['right_contains_s'] = df['right_' + sens_dict[dataset][0]].str.lower().str.contains(sens_dict[dataset][1].lower())
     else:
-        df['left_'+sens_dict[dataset][0]] =  df['left_'+sens_dict[dataset][0]].astype(str)
-        df['right_'+sens_dict[dataset][0]] =  df['right_'+sens_dict[dataset][0]].astype(str)
-
-        df['left_contains_s'] = df['left_'+sens_dict[dataset][0]].apply(lambda x: x.replace('&#216;','').replace('&#214;','').replace('&#237;',',').split(',')[-1].strip())
-        df['right_contains_s'] = df['right_'+sens_dict[dataset][0]].apply(lambda x: x.replace('&#216;','').replace('&#214;','').replace('&#237;',',').split(',')[-1].strip())
-        
+        # For datasets with functional comparison, perform additional gender-related processing
+        df['left_' + sens_dict[dataset][0]] = df['left_' + sens_dict[dataset][0]].astype(str)
+        df['right_' + sens_dict[dataset][0]] = df['right_' + sens_dict[dataset][0]].astype(str)
+        # Handling special characters and splitting the attribute values
+        df['left_contains_s'] = df['left_' + sens_dict[dataset][0]].apply(lambda x: x.replace('&#216;', '').replace('&#214;', '').replace('&#237;', ',').split(',')[-1].strip())
+        df['right_contains_s'] = df['right_' + sens_dict[dataset][0]].apply(lambda x: x.replace('&#216;', '').replace('&#214;', '').replace('&#237;', ',').split(',')[-1].strip())
+        # Mapping gender for each name in the attribute values
         df['left_contains_s'] = df['left_contains_s'].apply(lambda x: ', '.join([gender_rev(name) for name in x.split(',')]))
         df['right_contains_s'] = df['right_contains_s'].apply(lambda x: ', '.join([gender_rev(name) for name in x.split(',')]))
-
+        # Checking if 'female' is present in the gender mapping for each side
         df['left_contains_s'] = df['left_contains_s'].apply(lambda x: 'True' if 'female' in str(x) else 'False')
         df['right_contains_s'] = df['right_contains_s'].apply(lambda x: 'True' if 'female' in str(x) else 'False')
-        
+        # Converting the presence of 'female' to boolean
         df['left_contains_s'] = df['left_contains_s'].apply(lambda x: any(item in x for item in ['True']))
         df['right_contains_s'] = df['right_contains_s'].apply(lambda x: any(item in x for item in ['True']))
 
-        # df['left_contains_s'] = df['left_contains_s'].apply(lambda x: any(item in x for item in female_names))
-        # df['right_contains_s'] = df['right_contains_s'].apply(lambda x: any(item in x for item in female_names))
-
+    # Creating a resulting vector based on the presence of the sensitive attribute
     result_vector = np.logical_or(df['left_contains_s'], df['right_contains_s']).astype(int)
     sens_attr = np.array(result_vector).reshape(-1)
 
     return sens_attr
 
-
-
-
 ############################################################################
 ############################################################################
 ############################################################################
@@ -87,228 +90,148 @@ def make_sens_vector(df , dataset, sens_dict):
 ############################################################################
 
 
-
-def calc_DP_TPR(sens_attr,y_true,y_score ):
+# Function to calculate Distributional Parity for True Positive Rate (TPR)
+def calc_DP_TPR(sens_attr, y_true, y_score):
     nums = 1000
     Distributional_Parity_TPR = 0
     groups = list(np.unique(sens_attr))
-    for i,g1 in enumerate(groups):
+    # Iterating over groups of sensitive attribute values
+    for i, g1 in enumerate(groups):
         for g2 in groups[i+1:]:
-
-            y_g1 = y_true[sens_attr == g1 ]
-            S_g1 = y_score[sens_attr == g1 ]
-
-            y_g2 = y_true[sens_attr == g2 ]
-            S_g2 = y_score[sens_attr == g2 ]
-
-            S_g1_TPR = S_g1[y_g1 ==1]
-            S_g2_TPR = S_g2[y_g2 ==1]
-
+            # Extracting true positive rate for each group
+            y_g1 = y_true[sens_attr == g1]
+            S_g1 = y_score[sens_attr == g1]
+            y_g2 = y_true[sens_attr == g2]
+            S_g2 = y_score[sens_attr == g2]
+            S_g1_TPR = S_g1[y_g1 == 1]
+            S_g2_TPR = S_g2[y_g2 == 1]
             expected_val = 0
+            # Calculating expected difference in true positive rate across thresholds
             for thresh in np.linspace(0, 1, nums):
-
-
                 P1 = np.sum((S_g1_TPR > thresh)) / len(S_g1_TPR)
                 P2 = np.sum((S_g2_TPR > thresh)) / len(S_g2_TPR)
-
                 expected_val += np.abs(P1 - P2)
-
             expected_val = expected_val / nums
             Distributional_Parity_TPR += expected_val
     return Distributional_Parity_TPR
-        
 
-
-def calc_DP_FPR(sens_attr,y_true,y_score ):
+# Function to calculate Distributional Parity for False Positive Rate (FPR)
+def calc_DP_FPR(sens_attr, y_true, y_score):
     nums = 1000
     Distributional_Parity_FPR = 0
     groups = list(np.unique(sens_attr))
-
-    for i,g1 in enumerate(groups):
+    # Iterating over groups of sensitive attribute values
+    for i, g1 in enumerate(groups):
         for g2 in groups[i+1:]:
-
-            y_g1 = y_true[sens_attr == g1 ]
-            S_g1 = y_score[sens_attr == g1 ]
-
-            y_g2 = y_true[sens_attr == g2 ]
-            S_g2 = y_score[sens_attr == g2 ]
-
-            S_g1_FPR = S_g1[y_g1 ==0]
-            S_g2_FPR = S_g2[y_g2 ==0]
-
+            # Extracting false positive rate for each group
+            y_g1 = y_true[sens_attr == g1]
+            S_g1 = y_score[sens_attr == g1]
+            y_g2 = y_true[sens_attr == g2]
+            S_g2 = y_score[sens_attr == g2]
+            S_g1_FPR = S_g1[y_g1 == 0]
+            S_g2_FPR = S_g2[y_g2 == 0]
             expected_val = 0
+            # Calculating expected difference in false positive rate across thresholds
             for thresh in np.linspace(0, 1, nums):
-
-
                 P1 = np.sum((S_g1_FPR > thresh)) / len(S_g1_FPR)
                 P2 = np.sum((S_g2_FPR > thresh)) / len(S_g2_FPR)
-
                 expected_val += np.abs(P1 - P2)
-
             expected_val = expected_val / nums
             Distributional_Parity_FPR += expected_val
     return Distributional_Parity_FPR
-        
 
-
-
-
-def calc_SDD(sens_attr,y_true,y_score ):
+# Function to calculate Statistical Parity Difference (SDD)
+def calc_SDD(sens_attr, y_true, y_score):
     nums = 1000
     SDD = 0
     groups = list(np.unique(sens_attr))
-    for i,g1 in enumerate(groups):
-
-        y_g1 = y_true[sens_attr == g1 ]
-        S_g1 = y_score[sens_attr == g1 ]
-
+    # Iterating over groups of sensitive attribute values
+    for i, g1 in enumerate(groups):
+        # Extracting true positive rate for each group
+        y_g1 = y_true[sens_attr == g1]
+        S_g1 = y_score[sens_attr == g1]
         expected_val_BG = 0
+        # Calculating expected difference in true positive rate between the group and the whole dataset
         for thresh in np.linspace(0, 1, nums):
-
             P1 = np.sum((S_g1 > thresh)) / len(S_g1)
             P_BG = np.sum((y_score > thresh)) / len(y_score)
             expected_val_BG += np.abs(P1 - P_BG)
-
         expected_val_BG = expected_val_BG / nums
-
         SDD += expected_val_BG
     return SDD
 
 
-
-
-def calc_SPDD(sens_attr,y_true,y_score ):
+# Function to calculate Statistical Parity Difference for Positive Predictive Difference (SPDD)
+def calc_SPDD(sens_attr, y_true, y_score):
     nums = 1000
     SPDD = 0
     groups = list(np.unique(sens_attr))
-    for i,g1 in enumerate(groups):
+    # Iterating over groups of sensitive attribute values
+    for i, g1 in enumerate(groups):
         for g2 in groups[i+1:]:
-
-            y_g1 = y_true[sens_attr == g1 ]
-            S_g1 = y_score[sens_attr == g1 ]
-
-            y_g2 = y_true[sens_attr == g2 ]
-            S_g2 = y_score[sens_attr == g2 ]
-            
+            # Extracting predicted scores for each group
+            y_g1 = y_true[sens_attr == g1]
+            S_g1 = y_score[sens_attr == g1]
+            y_g2 = y_true[sens_attr == g2]
+            S_g2 = y_score[sens_attr == g2]
             expected_val = 0
+            # Calculating expected difference in positive predictive value across thresholds
             for thresh in np.linspace(0, 1, nums):
-
-
                 P1 = np.sum((S_g1 > thresh)) / len(S_g1)
                 P2 = np.sum((S_g2 > thresh)) / len(S_g2)
-
                 expected_val += np.abs(P1 - P2)
-
             expected_val = expected_val / nums
             SPDD += expected_val
     return SPDD
 
-# FNR + FPR
-
-
-
-
-
-def calc_DP_PR(sens_attr,y_true,y_score ):
+# Function to calculate Difference in Positive Rate (DP_PR)
+def calc_DP_PR(sens_attr, y_true, y_score):
     nums = 1000
     PR = 0
-
-
-    S_g1 = y_score[sens_attr == 1 ]
-    S_g2 = y_score[sens_attr == 0 ]
-    
+    # Extracting predicted scores for each group
+    S_g1 = y_score[sens_attr == 1]
+    S_g2 = y_score[sens_attr == 0]
     expected_val = 0
+    # Calculating expected difference in positive rate across thresholds
     for thresh in np.linspace(0, 1, nums):
-
-
         P1 = np.sum((S_g1 > thresh)) / len(S_g1)
         P2 = np.sum((S_g2 > thresh)) / len(S_g2)
-
         expected_val += np.abs(P1 - P2)
-
     expected_val = expected_val / nums
     return expected_val
 
-
-
-def calc_EO_disp(sens_attr,y_true,y_score ):
+# Function to calculate Equalized Odds Disparity (EO_disp)
+def calc_EO_disp(sens_attr, y_true, y_score):
     nums = 1000
     Distributional_Parity_FPR = 0
     groups = list(np.unique(sens_attr))
-
-
-
-    y_g1 = y_true[sens_attr == 1 ]
-    S_g1 = y_score[sens_attr == 1 ]
-
-    y_g2 = y_true[sens_attr == 0 ]
-    S_g2 = y_score[sens_attr == 0 ]
-
-    
-
-
-    # S_g1_FPR = S_g1[y_g1 ==0]
-    # S_g2_FPR = S_g2[y_g2 ==0]
-
-    # S_g1_FNR = S_g1[y_g1 ==1]
-    # S_g2_FNR = S_g2[y_g2 ==1]
-
-
-
+    # Extracting predicted scores for each sensitive attribute group
+    y_g1 = y_true[sens_attr == 1]
+    S_g1 = y_score[sens_attr == 1]
+    y_g2 = y_true[sens_attr == 0]
+    S_g2 = y_score[sens_attr == 0]
     expected_val = 0
+    # Calculating expected difference in equalized odds across thresholds
     for thresh in np.linspace(0, 1, nums):
-
-
-        # P1 = np.sum((S_g1_FPR > thresh)) / len(S_g1_FPR)
-        # P2 = np.sum((S_g2_FPR > thresh)) / len(S_g2_FPR)
-
-        # P11 = np.sum((S_g1_FNR < thresh)) / len(S_g1_FNR)
-        # P22 = np.sum((S_g2_FNR < thresh)) / len(S_g2_FNR)
-
-        
-
-        # expected_val += np.abs((P11 + P1) - (P22 + P2))
-
-
-        FP_g1 = np.sum((S_g1 > thresh)[y_g1 ==0])
-        FP_g2 = np.sum((S_g2 > thresh)[y_g2==0])
-
-        TN_g1 =  np.sum((S_g1 <= thresh)[y_g1 ==0])
-        TN_g2 =  np.sum((S_g2 <= thresh)[y_g2 ==0])
-
+        FP_g1 = np.sum((S_g1 > thresh)[y_g1 == 0])
+        FP_g2 = np.sum((S_g2 > thresh)[y_g2 == 0])
+        TN_g1 = np.sum((S_g1 <= thresh)[y_g1 == 0])
+        TN_g2 = np.sum((S_g2 <= thresh)[y_g2 == 0])
         fpr_g1 = FP_g1 / (FP_g1 + TN_g1)
         fpr_g2 = FP_g2 / (FP_g2 + TN_g2)
-
-        # fpr = fp / (fp + tn) # False Positive Rate
-
-        # fnr = fn / (fn + tp) # False Negative Rate
-
-        FN_g1 =  np.sum((S_g1 <= thresh)[y_g1 ==1])
-        TP_g1 = np.sum((S_g1 > thresh)[y_g1 ==1])
-
-        FN_g2 =  np.sum((S_g2 <= thresh)[y_g2 ==1])
-        TP_g2 = np.sum((S_g2 > thresh)[y_g2 ==1])
-
-        # fnr_g1 = FN_g1 / (FN_g1 + TP_g1)
-        # fnr_g2 = FN_g2 / (FN_g2 + TP_g2)
-
+        FN_g1 = np.sum((S_g1 <= thresh)[y_g1 == 1])
+        TP_g1 = np.sum((S_g1 > thresh)[y_g1 == 1])
+        FN_g2 = np.sum((S_g2 <= thresh)[y_g2 == 1])
+        TP_g2 = np.sum((S_g2 > thresh)[y_g2 == 1])
         tpr_g1 = TP_g1 / (FN_g1 + TP_g1)
         tpr_g2 = TP_g2 / (FN_g2 + TP_g2)
-
-
-                # tpr + fpr
-
-        expected_val+= np.abs((tpr_g1 + fpr_g1) - (tpr_g2 + fpr_g2))
-
-
+        expected_val += np.abs((tpr_g1 + fpr_g1) - (tpr_g2 + fpr_g2))
     expected_val = expected_val / nums
     Distributional_Parity_FPR += expected_val
     return Distributional_Parity_FPR
-        
+  
 
 
-import numpy as np
-from sklearn.metrics import confusion_matrix
 
 def calculate_additional_fairness_metrics(y_true, y_pred, sensitive_att):
     # Initialize dictionaries to hold metrics for sensitive and non-sensitive groups
@@ -388,12 +311,7 @@ def calculate_additional_fairness_metrics2(y_true, y_pred, sensitive_att):
         tnr = tn / (tn + fp) # True Negative Rate
 
         return {'TPR': tpr, 'FPR': fpr, 'FNR': fnr, 'TNR': tnr}
-        
-        
-        # (tp + tn) / (tp+tn+fp+fn)
-        
-        # tp / (tp + fn)
-    
+
 
 
     
@@ -452,87 +370,71 @@ def calculate_additional_fairness_metrics2(y_true, y_pred, sensitive_att):
 ########################################################################
 
 
+# Function to calculate the number of bins for histogram calculation
 def calc_bin(data):
     try:
+        # Calculate first and third quartiles
         Q1, Q3 = np.percentile(data, [25, 75])
         IQR = Q3 - Q1
+        # Calculate bin width based on Freedman-Diaconis rule
         bin_width = 2 * IQR / (len(data) ** (1/3))
+        # Calculate the number of bins
         data_range = np.max(data) - np.min(data)
         num_bins = int(np.round(data_range / bin_width))
     except:
+        # If calculation fails, default to 20 bins
         num_bins = 20
-
     return num_bins
 
-
-def calc_bary(score,sens_attr, R = False):
+# Function to calculate the barycenter of two distributions
+def calc_bary(score, sens_attr, R=False):
     score_g1 = score[sens_attr == 1]
     score_g2 = score[sens_attr == 0]
-
-
-
-    num  = min(int(max(calc_bin(score_g1)*1.5, calc_bin(score_g2)*1.5)), 500)
-    hist1, bin_edges1 = np.histogram(score_g1, bins=np.linspace(0, 1, num+1 ))
-    hist2, bin_edges2 = np.histogram(score_g2, bins=np.linspace(0, 1, num+1 ))
-
-
+    # Determine the number of bins for histogram calculation
+    num = min(int(max(calc_bin(score_g1) * 1.5, calc_bin(score_g2) * 1.5)), 500)
+    # Calculate histograms for each group
+    hist1, bin_edges1 = np.histogram(score_g1, bins=np.linspace(0, 1, num + 1))
+    hist2, bin_edges2 = np.histogram(score_g2, bins=np.linspace(0, 1, num + 1))
+    # Calculate bin centers
     bin_centers1 = 0.5 * (bin_edges1[:-1] + bin_edges1[1:])
     bin_centers2 = 0.5 * (bin_edges2[:-1] + bin_edges2[1:])
-
-
+    # Normalize histograms
     hist1 = hist1 / np.sum(hist1)
     hist2 = hist2 / np.sum(hist2)
-
-    hist1[hist1 == 0 ] = 1e-20
-    hist2[hist2 == 0 ] = 1e-20
-
+    hist1[hist1 == 0] = 1e-20
+    hist2[hist2 == 0] = 1e-20
     a1 = hist1
     a2 = hist2
-
-
-    M  =ot.utils.dist(hist1.reshape(-1,1),metric='cityblock')
+    # Calculate the distance matrix
+    M = ot.utils.dist(hist1.reshape(-1, 1), metric='cityblock')
     M /= M.max()
     A = np.vstack((hist1, hist2)).T
-
     weight = 0.5 # 0<=weight<=1
     weights = np.array([1 - weight, weight])
-
-    # wasserstein
+    # Compute Wasserstein barycenter
     reg = 1e-10
     alpha = 1
     bary_wass = ot.unbalanced.barycenter_unbalanced(A, M, reg, alpha, weights=weights)
-
     if R:
         return bary_wass, A, bin_centers1, bin_centers2
-
     return bary_wass
 
-
-
-
-def map_scores(bary_wass,score, sens_attr ):
-
+# Function to map scores to the distribution of the barycenter
+def map_scores(bary_wass, score, sens_attr):
     score_g1 = score[sens_attr == 1]
     score_g2 = score[sens_attr == 0]
-
-    mapper1 = ot.da.MappingTransport(mu=.001, eta=1e-8, bias=False, max_iter=300, verbose= True, kernel = 'gaussian', sigma = 2)
-    mapper1.fit(Xs=score_g1.reshape(-1, 1),Xt = bary_wass.reshape(-1, 1))
-
-    mapper2 = ot.da.MappingTransport(mu=.001, eta=1e-8, bias=False, max_iter=300, verbose= True, kernel = 'gaussian', sigma = 2)
-    mapper2.fit(Xs=score_g2.reshape(-1, 1), Xt = bary_wass.reshape(-1, 1))
-
-    # Use the mapper to transform score lists to the distribution of the barycenter
+    # Fit transport maps
+    mapper1 = ot.da.MappingTransport(mu=.001, eta=1e-8, bias=False, max_iter=300, verbose=True, kernel='gaussian', sigma=2)
+    mapper1.fit(Xs=score_g1.reshape(-1, 1), Xt=bary_wass.reshape(-1, 1))
+    mapper2 = ot.da.MappingTransport(mu=.001, eta=1e-8, bias=False, max_iter=300, verbose=True, kernel='gaussian', sigma=2)
+    mapper2.fit(Xs=score_g2.reshape(-1, 1), Xt=bary_wass.reshape(-1, 1))
+    # Transform scores to the distribution of the barycenter
     scores_list_1_mapped = mapper1.transform(Xs=score_g1.reshape(-1, 1)).ravel()
     scores_list_2_mapped = mapper2.transform(Xs=score_g2.reshape(-1, 1)).ravel()
-
-
-
     map_score = np.zeros(score.shape)
     map_score[sens_attr == 1] = scores_list_1_mapped
     map_score[sens_attr == 0] = scores_list_2_mapped
-
     return map_score
-
 
 
 def PR_make(PR_total, PR_g1, PR_g2,y_true, y_pred ,sens_attr):
