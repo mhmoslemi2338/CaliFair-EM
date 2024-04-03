@@ -64,6 +64,6 @@ for task in [
 
 
     pred_y = model.run_prediction(test)
-    pred_y.to_csv('SCORES/score_DeepMatcher_'+task+ '.csv', index=False) 
+    pred_y.to_csv('../SCORES/score_DeepMatcher_'+task+ '.csv', index=False) 
 
 

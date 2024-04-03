@@ -151,7 +151,7 @@ for task in [
 
 
     df = pd.DataFrame(all_probs, columns=['score'])
-    df.to_csv('SCORES/score_HierGAT_'+task+'.csv', index=False)  
+    df.to_csv('../SCORES/score_HierGAT_'+task+'.csv', index=False)  
     torch.cuda.empty_cache()
  
 

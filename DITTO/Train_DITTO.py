@@ -162,5 +162,5 @@ for task in [
 
 
     df = pd.DataFrame(all_probs, columns=['score'])
-    df.to_csv('SCORES/score_DITTO_'+task.split('/')[1]+'.csv', index=False)  
+    df.to_csv('../SCORES/score_DITTO_'+task.split('/')[1]+'.csv', index=False)  
 

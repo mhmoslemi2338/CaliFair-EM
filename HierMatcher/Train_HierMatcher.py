@@ -82,7 +82,7 @@ for task in [
     model.load_state_dict(state['model'])
 
     y_score = model.run_prediction(test)
-    y_score.to_csv('SCORES/score_HierMatcher_'+task+'.csv', index=False)  
+    y_score.to_csv('../SCORES/score_HierMatcher_'+task+'.csv', index=False)  
 
 
 

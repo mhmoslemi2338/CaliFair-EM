@@ -187,4 +187,4 @@ for task in [
     y_true = all_y
     y_score = all_probs
     df = pd.DataFrame({'prob': y_score, 'label': y_true})
-    df.to_csv('SCORES/score_EMTransformer_'+data_dir.strip('/').split('/')[-1]+ '.csv', index=False)  
+    df.to_csv('../SCORES/score_EMTransformer_'+data_dir.strip('/').split('/')[-1]+ '.csv', index=False)  

@@ -138,6 +138,6 @@ for task in [
         df = pd.DataFrame({'left':col_left, 'right':col_right, 'label': label, 'score':proba})
 
 
-        df.to_csv('SCORES/score_'+model+'_'+task+'.csv', index = False)
+        df.to_csv('../SCORES/score_'+model+'_'+task+'.csv', index = False)
         print(model, task)
 
