@@ -1,3 +1,7 @@
+# official code for the paper: Threshold-Independent Fair Matching through Score Calibration
+https://arxiv.org/abs/2405.20051
+
+
 ## Data Directory
 
 You can find all the data we used in the `DATA` directory.
@@ -9,3 +13,5 @@ In each of the directories for `DITTO`, `DeepMatcher`, `EMTransformer`, `HierGAT
 ## Regenerating Experiments
 
 You can regenerate the experiments from the `experiments.ipynb` file, which utilizes the scores in the `SCORES` directory. This notebook also saves some variables in `.pkl` format and saves the final results and measurements in `.csv` format, as well as figures in `.pdf` format, in the `FIGURES` directory.
+
+
