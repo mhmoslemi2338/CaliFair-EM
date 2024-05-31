@@ -9,6 +9,8 @@ Entity Matching (EM) is a critical task in numerous fields, such as healthcare, 
 
 You can find all the data we used in the `DATA` directory.
 
+the dataset are from the paper Deep Learning for Entity Matching: A Design Space Exploration, SIGMOD 2018 at https://github.com/anhaidgroup/deepmatcher/blob/master/Datasets.md
+
 ## Implementation Details
 
 In each of the directories for `DITTO`, `DeepMatcher`, `EMTransformer`, `HierGAT`, `HierMatcher`, and `Magellan`, you will find the implementation for each method and instructions for obtaining the results. Each directory contains a Python script named starting with `Train_`. You can use this script to retrain the network. After training, the score for the test data will be automatically saved in the `SCORES` directory.
