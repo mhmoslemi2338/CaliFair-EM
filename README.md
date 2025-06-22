@@ -1,6 +1,6 @@
 # Official implementation of GUIDE-AI @ SIGMOD 2024 paper "Threshold-Independent Fair Matching through Score Calibration"
 
-[![Paper](https://img.shields.io/badge/Paper-GUIDE--AI%202024-blue)](https://doi.org/10.1145/3665601.3669845)
+[![Paper](https://img.shields.io/badge/Paper-GUIDE--AI@SIGMOD%202024-blue)](https://doi.org/10.1145/3665601.3669845)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 ![Python](https://img.shields.io/badge/python-3.10%2B-brightgreen)
 
