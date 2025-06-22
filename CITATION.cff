@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+message: >
+  If you use this code, please cite our GUIDE-AI 2024 paper.
+
+title: Threshold-Independent Fair Matching through Score Calibration
+version: "1.0.0"
+doi: 10.1145/3665601.3669845
+date-released: 2024-06-14        
+
+authors:
+  - family-names: Moslemi
+    given-names: Mohammad Hossein
+    orcid: https://orcid.org/0009-0002-0278-4665
+  - family-names: Milani
+    given-names: Mostafa
+
+repository-code: https://github.com/mhmoslemi2338/CaliFair-EM
+url: https://doi.org/10.1145/3665601.3669845
+license: MIT
+
+preferred-citation:
+  type: conference-paper
+  title: Threshold-Independent Fair Matching through Score Calibration
+  authors:
+    - family-names: Moslemi
+      given-names: Mohammad Hossein
+      orcid: https://orcid.org/0009-0002-0278-4665
+    - family-names: Milani
+      given-names: Mostafa
+  conference-name: Proceedings of the Conference on Governance, Understanding and Integration of Data for Effective and Responsible AI (GUIDE-AI '24)
+  year: 2024
+  pages: 40–44
+  doi: 10.1145/3665601.3669845
